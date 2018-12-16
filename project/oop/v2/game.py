@@ -8,17 +8,15 @@ from pygame.locals import *
 
 
 class Game:
-    def __init__(self, data, conf, game_time):
+    def __init__(self, config, game_time):
         self.round = 0
         self.points = 0
-        self.data = data
-        self.conf = conf
+        self.config = config
         self.start_time_pause = None
         self.is_finished = False
         self.game_time = game_time
 
-    # new Round has new random Int and Local time of the pause(wait bcs of
-    # Donut)
+    # new Round has new random Int and Local time of the pause(wait bcs of Donut)
     def new_round(self, beer):
         self.round += 1
         self.ran_num = randint(2, 20)
@@ -35,14 +33,13 @@ class Game:
             # Adds seconds to the starttime and gets the end time
             end_time_pause = add_secs(self.start_time_pause, self.random_time)
             local_time = datetime.datetime.now().time()
-            print(self.start_time_pause)
-            print(end_time_pause, datetime.datetime.now().time())
             if local_time >= end_time_pause:
                 self.start_time_pause = None
                 return False
             else:
                 return True
-                """
+
+    """
     1 for Donut, 0 for Beer
     """
 
@@ -57,9 +54,6 @@ class Game:
             return 1
         else:
             return 0
-
-    def get_data(self, index):
-        self.data[index]
 
     """
     Handles the clicks of the user to the beer and donut
@@ -102,13 +96,15 @@ class Game:
     def show_text(self, text, xCoord, yCoord):
         # render text
         label = text.get_font().render(text.content, 1, (255, 255, 0))
-        self.conf.window.blit(label, (xCoord, yCoord))
+        self.config.window.blit(label, (xCoord, yCoord))
 
         return label
 
-    def show_object(self, object):
-        self.conf.window.fill(self.conf.color)
-        self.conf.window.blit(object.get_image(), object.get_rect())
+    def show_game_object(self, game_object):
+        self.config.window.fill(self.config.color)
+        self.config.window.blit(
+            game_object.get_image(),
+            game_object.get_rect())
         # print (object.source)
 
     def isOverRect(self, object, mouse_pos):

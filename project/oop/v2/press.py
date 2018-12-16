@@ -57,38 +57,38 @@ def main():
         game.input()
         game.event_handling(beer, donut, restart_text)
 
-        game.conf.window.fill(LIGHTBLUE)
+        game.config.window.fill(LIGHTBLUE)
 
         if game.is_finished:
-            game.show_text(result_text, (game.conf.window.get_width(
-            ) / 2) - (instruction_text_label.get_width() / 2), game.conf.window.get_height() / 3)
+            game.show_text(result_text, (game.config.window.get_width(
+            ) / 2) - (instruction_text_label.get_width() / 2), game.config.window.get_height() / 3)
             restart_text.label = game.show_text(
                 restart_text,
-                (game.conf.window.get_width() / 2) - (
-                    instruction_text_label.get_width() / 2),
-                (game.conf.window.get_height() / 3) * 1.5)
+                (game.config.window.get_width() / 2) - (
+                        instruction_text_label.get_width() / 2),
+                (game.config.window.get_height() / 3) * 1.5)
             # return 0
 
         else:
             if game.get_status(beer, donut) == 1:
-                game.show_object(donut)
+                game.show_game_object(donut)
 
             else:
-                game.show_object(beer)
+                game.show_game_object(beer)
 
             game.show_text(
                 points_text,
-                game.conf.window.get_width() / 5,
-                game.conf.window.get_height() / 3)
+                game.config.window.get_width() / 5,
+                game.config.window.get_height() / 3)
             game.show_text(
                 time_text,
-                (game.conf.window.get_width() / 4) * 3,
-                game.conf.window.get_height() / 3)
-            game.show_text(instruction_text, (game.conf.window.get_width(
-            ) / 2) - (instruction_text_label.get_width() / 2), game.conf.window.get_height() / 4)
+                (game.config.window.get_width() / 4) * 3,
+                game.config.window.get_height() / 3)
+            game.show_text(instruction_text, (game.config.window.get_width(
+            ) / 2) - (instruction_text_label.get_width() / 2), game.config.window.get_height() / 4)
 
         pygame.display.update()
-        game.conf.fps_clock.tick(FPS)
+        game.config.fps_clock.tick(FPS)
 
 
 if __name__ == '__main__':

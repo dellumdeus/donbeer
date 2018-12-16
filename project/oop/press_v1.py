@@ -158,11 +158,11 @@ def main():
     conf = Configuration(700, 600)
     
     print (datetime.datetime.now().time())
-    beer = Beer('bier2.png')
+    beer = Beer('../images/bier2.png')
     beerimg = beer.getImage()
     beerRect = beerimg.get_rect()
     
-    donut = Donut(0,'donut2.png' )
+    donut = Donut(0,'../images/donut2.png' )
     symbols = [beer, donut]
     game = Game(symbols, conf)
     

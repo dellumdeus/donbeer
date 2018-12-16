@@ -226,11 +226,11 @@ class Game:
 def main():
     
     #Hauptelemente erstellen und konfigurieren
-    beer = Beer('images/bier2.png')
+    beer = Beer('../images/bier2.png')
     beerimg = beer.getImage()
     beerRect = beerimg.get_rect()
     
-    donut = Donut(0,'images/donut2.png' )
+    donut = Donut(0,'../images/donut2.png' )
     data = [beer, donut]
     
     conf = Configuration(700, 600)
@@ -247,7 +247,7 @@ def main():
     timeText = Text('fonts/MeathFLF.ttf', 50, '')
     resultText = Text('fonts/MeathFLF.ttf', 80, '')
     restartText = Text('fonts/MeathFLF.ttf', 80, '')
-    print (data[donut])
+    #print (data[donut])
     '''
     while (game.run() not 0):
         

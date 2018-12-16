@@ -12,9 +12,11 @@ class Game:
         self.round = 0
         self.points = 0
         self.config = config
-        self.start_time_pause = None
+        self.donut_wait_start = None
         self.is_finished = False
         self.game_time = game_time
+        self.ran_num = None
+        self.random_time = None
 
     # new Round has new random Int and Local time of the pause(wait bcs of Donut)
     def new_round(self, beer):
@@ -29,12 +31,11 @@ class Game:
     """
 
     def wait(self):
-        if self.start_time_pause is not None:
-            # Adds seconds to the starttime and gets the end time
-            end_time_pause = add_secs(self.start_time_pause, self.random_time)
-            local_time = datetime.datetime.now().time()
-            if local_time >= end_time_pause:
-                self.start_time_pause = None
+        if self.donut_wait_start:
+            # Adds seconds to the start-time and gets the end time
+            donut_wait_end = self.donut_wait_start + datetime.timedelta(seconds=self.random_time)
+            if datetime.datetime.now() >= donut_wait_end:
+                self.donut_wait_start = None
                 return False
             else:
                 return True
@@ -43,14 +44,12 @@ class Game:
     1 for Donut, 0 for Beer
     """
 
-    def get_status(self, beer, donut):
-        # print (beer.clicks == self.getRanNum())
+    def get_status(self, beer):
         if beer.clicks == self.get_ran_num():
-            self.start_time_pause = datetime.datetime.now().time()
-            # print (self.start_time_pause)
+            self.donut_wait_start = datetime.datetime.now()
             self.new_round(beer)
             return 1
-        if self.wait():
+        elif self.wait():
             return 1
         else:
             return 0
@@ -60,24 +59,23 @@ class Game:
     """
 
     def event_handling(self, beer, donut, restart):
-        if self.mousePos is not None:
+        if self.mouse_pos is not None:
             # if the user clicked onto beer or donut
-            if self.isOverRect(
-                    beer, self.mousePos) or self.isOverRect(
-                donut, self.mousePos):
+            if Game.is_over_rect(
+                    beer, self.mouse_pos) or self.is_over_rect(donut, self.mouse_pos):
                 # if he has clicked in the beer phase
-                if self.get_status(beer, donut) == 0:
+                if self.get_status(beer) == 0:
                     beer.clicks += 1
                     self.points += beer.clicks
                 else:
                     self.is_finished = True
             # if the user clicked onto the restart text
-            if restart.label is not None and self.isOverRect(
-                    restart, self.mousePos):
+            if restart.label is not None and self.is_over_rect(
+                    restart, self.mouse_pos):
                 self.is_finished = False
 
     def input(self):
-        self.mousePos = None
+        self.mouse_pos = None
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -85,7 +83,7 @@ class Game:
 
             # If clicked
             elif event.type == MOUSEBUTTONUP and event.button == 1:
-                self.mousePos = pygame.mouse.get_pos()
+                self.mouse_pos = pygame.mouse.get_pos()
 
     '''
     def run(self, beer, donut):
@@ -107,8 +105,9 @@ class Game:
             game_object.get_rect())
         # print (object.source)
 
-    def isOverRect(self, object, mouse_pos):
-        if object.get_rect().collidepoint(mouse_pos):
+    @staticmethod
+    def is_over_rect(game_object, mouse_pos):
+        if game_object.get_rect().collidepoint(mouse_pos):
             return True
         return False
 
@@ -124,9 +123,3 @@ class Game:
             sleep(1)
             self.game_time -= 1
         self.is_finished = True
-
-
-def add_secs(tm, secs):
-    fulldate = datetime.datetime(100, 1, 1, tm.hour, tm.minute, tm.second)
-    fulldate = fulldate + datetime.timedelta(seconds=secs)
-    return fulldate.time()

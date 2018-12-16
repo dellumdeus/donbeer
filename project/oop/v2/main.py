@@ -59,7 +59,7 @@ def main():
             # return 0
 
         else:
-            if game.get_status(beer, donut) == 1:
+            if game.get_status(beer) == 1:
                 game.show_game_object(donut)
 
             else:

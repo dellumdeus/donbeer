@@ -1,15 +1,15 @@
-import pygame, sys, random
+import pygame
+import sys
+import random
 from pygame.locals import *
 from random import randint
-
-
 
 
 FPS = 60
 WINDOWWIDTH = 700
 WINDOWHEIGHT = 600
 
-CYAN     = (  0, 255, 255)
+CYAN = (0, 255, 255)
 
 
 bier = pygame.image.load('images/bier2.png')
@@ -18,23 +18,24 @@ donut = pygame.image.load('images/donut2.png')
 donutRect = donut.get_rect()
 
 bierRect.center = (350, 300)
-donutRect.center = (350,300)
+donutRect.center = (350, 300)
 COUNTER = 0
 
+
 def main():
-    global  FPSCLOCK, DISPLAYSURF
+    global FPSCLOCK, DISPLAYSURF
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
-    
+
     mouseX = 0
     mouseY = 0
-    
+
     pygame.display.set_caption('PRESS!')
-    
+
     DISPLAYSURF.fill(CYAN)
-    
-    while True: # main game loop
+
+    while True:  # main game loop
         DISPLAYSURF.fill(CYAN)
         global COUNTER
         for event in pygame.event.get():
@@ -45,39 +46,37 @@ def main():
                 mpos = pygame.mouse.get_pos()
                 DISPLAYSURF.fill(CYAN)
                 DISPLAYSURF.blit(bier, bierRect)
-                
+
                 if bierRect.collidepoint(mpos):
                     COUNTER += 1
-                    if test() :
-                        
-                        COUNTER  = 0
+                    if test():
+
+                        COUNTER = 0
                         DISPLAYSURF.blit(donut, donutRect)
-                    
-                elif donutRect.collidepoint(mpos): 
+
+                elif donutRect.collidepoint(mpos):
                     break
-          
-            else :
-                
+
+            else:
+
                 if test():
                     DISPLAYSURF.blit(donut, donutRect)
-                else :
+                else:
                     DISPLAYSURF.blit(bier, bierRect)
                   #  print ("Hallo")
-                    
-           
- 
+
         pygame.display.update()
         FPSCLOCK.tick(FPS)
-    
+
 
 def test():
     global COUNTER
-    if COUNTER == randint(2,20):
+    if COUNTER == randint(2, 20):
         return True
     #COUNTER += 1
-    print (COUNTER)
+    print(COUNTER)
     return False
-    
-    
+
+
 if __name__ == '__main__':
     main()

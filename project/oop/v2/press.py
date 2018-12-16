@@ -1,5 +1,3 @@
-
-
 from threading import Thread
 import pygame
 
@@ -19,25 +17,19 @@ def main():
     beer = Beer('../../images/bier2.png')
 
     donut = Donut(0, '../../images/donut2.png')
-    data = [beer, donut]
 
-    conf = Configuration(700, 600)
-    game = Game(data, conf, 60)
-    game.conf.set_up(LIGHTBLUE, True)
+    game = Game(Configuration(700, 600, LIGHTBLUE), 60)
+    game.config.set_up(True)
 
-    beer.get_rect().center = (
-        game.conf.window.get_width() / 2,
-        game.conf.window.get_height() / 2)
-    donut.get_rect().center = (
-        game.conf.window.get_width() / 2,
-        game.conf.window.get_height() / 2)
+    for element in [donut, beer]:
+        element.get_rect().center = (game.config.window.get_width() / 2, game.config.window.get_height() / 2)
 
     game.new_round(beer)
 
-    points_text = Text('../../fonts/MeathFLF.ttf', 50, '')
-    instruction_text = Text('../../fonts/MeathFLF.ttf', 60, '')
-    time_text = Text('../../fonts/MeathFLF.ttf', 50, '')
-    result_text = Text('../../fonts/MeathFLF.ttf', 80, '')
+    points_text = Text('../../fonts/MeathFLF.ttf', 50)
+    instruction_text = Text('../../fonts/MeathFLF.ttf', 60)
+    time_text = Text('../../fonts/MeathFLF.ttf', 50)
+    result_text = Text('../../fonts/MeathFLF.ttf', 80)
     restart_text = Text('../../fonts/MeathFLF.ttf', 80, 'Restart')
 
     # while (game.run() not 0):
@@ -47,10 +39,7 @@ def main():
     while True:  # main game loop
 
         # Set the data for Points and Countdown
-        points_text.content = 'Points: ' + str(game.points)
-        time_text.content = 'Time: ' + str(game.game_time)
-        instruction_text.content = 'Don\'t press the donut!'
-        result_text.content = 'Total result: ' + str(game.points)
+        set_text_contents(game, instruction_text, points_text, result_text, time_text)
 
         instruction_text_label = instruction_text.get_font().render(
             instruction_text.content, 1, (255, 255, 0))
@@ -89,6 +78,13 @@ def main():
 
         pygame.display.update()
         game.config.fps_clock.tick(FPS)
+
+
+def set_text_contents(game, instruction_text, points_text, result_text, time_text):
+    points_text.content = 'Points: ' + str(game.points)
+    time_text.content = 'Time: ' + str(game.game_time)
+    instruction_text.content = 'Don\'t press the donut!'
+    result_text.content = 'Total result: ' + str(game.points)
 
 
 if __name__ == '__main__':

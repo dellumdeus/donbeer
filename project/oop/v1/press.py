@@ -66,11 +66,11 @@ class Game:
 
     def showObject(self, object):
         self.conf.window.fill(CYAN)
-        self.conf.window.blit(object.getImage(), object.getRect())
+        self.conf.window.blit(object.get_image(), object.get_rect())
         #print (object.source)
 
     def isOverRect(self, object, mousePos):
-        if (object.getRect().collidepoint(mousePos)):
+        if (object.get_rect().collidepoint(mousePos)):
             return True
         return False
 
@@ -152,8 +152,8 @@ class Donut:
 
 
 def tester(beer, beerRect):
-    print(beer.getRect().centerx)
-    print(beer.getRect().centery)
+    print(beer.get_rect().centerx)
+    print(beer.get_rect().centery)
 
 
 class Configuration:

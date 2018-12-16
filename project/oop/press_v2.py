@@ -80,9 +80,14 @@ class Text:
         self.font = font  # font_path = "./fonts/newfont.ttf"
         self.fontSize = size  # font_size = 32
         self.content = content  # 'ich will essen'
+        self.label = self.getFont().render(content, 1, (255, 255, 0))
+        self.rect = self.label.get_rect(topleft=(788, 587))
 
     def getFont(self):
         return pygame.font.Font(self.font, self.fontSize)
+
+    def getRect(self):
+        return self.rect
 
 
 class Game:
@@ -110,6 +115,7 @@ class Game:
 
     def wait(self, beer):
         # print (self.startTimePause)
+        if self.startTimePause is not None:
             # Adds seconds to the starttime and gets the end time
             endTimePause = addSecs(self.startTimePause, self.randomTime)
             localTime = datetime.datetime.now().time()
@@ -125,9 +131,8 @@ class Game:
     """
 
     def getStatus(self, beer, donut):
-        #print (beer.clicks == self.getRanNum())
-        if (data[0].clicks == self.getRanNum()):
         # print (beer.clicks == self.getRanNum())
+        if beer.clicks == self.getRanNum():
             self.startTimePause = datetime.datetime.now().time()
             # print (self.startTimePause)
             self.newRound(beer)
@@ -154,7 +159,9 @@ class Game:
                     self.points += beer.clicks
                 else:
                     self.isFinished = True
-            # if (self.isOverRect(restart, self.mousePos))
+            # if the user clicked onto the restart text
+            if restart.label is not None and self.isOverRect(restart, self.mousePos):
+                self.isFinished = False
 
     def input(self):
         self.mousePos = None
@@ -166,51 +173,12 @@ class Game:
             # If clicked
             elif event.type == MOUSEBUTTONUP and event.button == 1:
                 self.mousePos = pygame.mouse.get_pos()
+
     '''
     def run(self, beer, donut):
         thread = Thread(target = game.countdown)
     thread.start()
-
-
-
-
-    while True: # main game loop
-
-        #Set the data for Points and Countdown
-        pointsText.content = 'Points: ' + str(game.points)
-        timeText.content = 'Time: ' + str(game.gameTime)
-        instructionText.content = 'Don\'t press the donut!'
-        resultText.content = 'Total result: ' + str(game.points)
-        restartText.content = 'Restart'
-
-        label = instructionText.getFont().render(instructionText.content, 1, (255,255,0))
-        game.input()
-        game.eventHandling(beer, donut)
-
-        game.conf.window.fill(LIGHTBLUE)
-
-        if (game.isFinished):
-            game.showText(resultText, (game.conf.window.get_width()/2)- (label.get_width()/2), game.conf.window.get_height()/3)
-            game.showText(restartText, (game.conf.window.get_width()/2)- (label.get_width()/2), (game.conf.window.get_height()/3) *1.5)
-            #return 0
-
-        else:
-            if(game.getStatus(beer, donut) == 1):
-                game.showObject(donut)
-
-            else:
-                game.showObject(beer)
-
-
-            game.showText(pointsText, game.conf.window.get_width()/5, game.conf.window.get_height()/3)
-            game.showText(timeText, (game.conf.window.get_width()/4)*3, game.conf.window.get_height()/3)
-            game.showText(instructionText, (game.conf.window.get_width()/2)- (label.get_width()/2), game.conf.window.get_height()/4)
-
-
-
-        pygame.display.update()
-        game.conf.fpsClock.tick(FPS)
-      '''
+    '''
 
     def showText(self, text, xCoord, yCoord):
         # render text
@@ -244,11 +212,9 @@ class Game:
 
 
 def main():
-
+    print('ich werde augefurt')
     # Hauptelemente erstellen und konfigurieren
     beer = Beer('../images/bier2.png')
-    beerimg = beer.getImage()
-    beerRect = beerimg.get_rect()
 
     donut = Donut(0, '../images/donut2.png')
     data = [beer, donut]
@@ -264,42 +230,40 @@ def main():
         game.conf.window.get_width() / 2,
         game.conf.window.get_height() / 2)
 
+
     game.newRound(beer)
 
-    pointsText = Text('fonts/MeathFLF.ttf', 50, '')
-    instructionText = Text('fonts/MeathFLF.ttf', 60, '')
-    timeText = Text('fonts/MeathFLF.ttf', 50, '')
-    resultText = Text('fonts/MeathFLF.ttf', 80, '')
-    restartText = Text('fonts/MeathFLF.ttf', 80, '')
-    #print (data[donut])
-    '''
-    while (game.run() not 0):
+    pointsText = Text('../fonts/MeathFLF.ttf', 50, '')
+    instructionText = Text('../fonts/MeathFLF.ttf', 60, '')
+    timeText = Text('../fonts/MeathFLF.ttf', 50, '')
+    resultText = Text('../fonts/MeathFLF.ttf', 80, '')
+    restartText = Text('../fonts/MeathFLF.ttf', 80, 'Restart')
 
+    # while (game.run() not 0):
 
-    thread = Thread(target = game.countdown)
+    thread = Thread(target=game.countdown)
     thread.start()
+    while True:  # main game loop
 
-
-
-    while True: # main game loop
-
-        #Set the data for Points and Countdown
+        # Set the data for Points and Countdown
         pointsText.content = 'Points: ' + str(game.points)
         timeText.content = 'Time: ' + str(game.gameTime)
         instructionText.content = 'Don\'t press the donut!'
         resultText.content = 'Total result: ' + str(game.points)
-        restartText.content = 'Restart'
 
-        label = instructionText.getFont().render(instructionText.content, 1, (255,255,0))
+        instructionTextLabel = instructionText.getFont().render(instructionText.content, 1, (255, 255, 0))
         game.input()
-        game.eventHandling(beer, donut)
+        game.eventHandling(beer, donut, restartText)
 
         game.conf.window.fill(LIGHTBLUE)
 
-        if (game.isFinished):
-            game.showText(resultText, (game.conf.window.get_width()/2)- (label.get_width()/2), game.conf.window.get_height()/3)
-            game.showText(restartText, (game.conf.window.get_width()/2)- (label.get_width()/2), (game.conf.window.get_height()/3) *1.5)
-            #return 0
+        if game.isFinished:
+            game.showText(resultText, (game.conf.window.get_width() / 2) - (instructionTextLabel.get_width() / 2),
+                          game.conf.window.get_height() / 3)
+            restartText.label = game.showText(restartText, (game.conf.window.get_width() / 2) - (
+                        instructionTextLabel.get_width() / 2),
+                                              (game.conf.window.get_height() / 3) * 1.5)
+            # return 0
 
         else:
             if game.getStatus(beer, donut) == 1:
@@ -308,16 +272,13 @@ def main():
             else:
                 game.showObject(beer)
 
-
-            game.showText(pointsText, game.conf.window.get_width()/5, game.conf.window.get_height()/3)
-            game.showText(timeText, (game.conf.window.get_width()/4)*3, game.conf.window.get_height()/3)
-            game.showText(instructionText, (game.conf.window.get_width()/2)- (label.get_width()/2), game.conf.window.get_height()/4)
-
-
+            game.showText(pointsText, game.conf.window.get_width() / 5, game.conf.window.get_height() / 3)
+            game.showText(timeText, (game.conf.window.get_width() / 4) * 3, game.conf.window.get_height() / 3)
+            game.showText(instructionText, (game.conf.window.get_width() / 2) - (instructionTextLabel.get_width() / 2),
+                          game.conf.window.get_height() / 4)
 
         pygame.display.update()
         game.conf.fpsClock.tick(FPS)
-    '''
 
 
 if __name__ == '__main__':

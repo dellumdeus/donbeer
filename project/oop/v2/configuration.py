@@ -5,7 +5,7 @@ class Configuration:
     def __init__(self, width, height):
         self.window_width = width
         self.window_height = height
-        self.fpsClock = pygame.time.Clock()
+        self.fps_clock = pygame.time.Clock()
 
     def set_up(self, color, is_full_screen):
         self.color = color

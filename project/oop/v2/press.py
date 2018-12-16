@@ -88,7 +88,7 @@ def main():
             ) / 2) - (instruction_text_label.get_width() / 2), game.conf.window.get_height() / 4)
 
         pygame.display.update()
-        game.conf.fpsClock.tick(FPS)
+        game.conf.fps_clock.tick(FPS)
 
 
 if __name__ == '__main__':

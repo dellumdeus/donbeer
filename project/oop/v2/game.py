@@ -9,6 +9,7 @@ from pygame.locals import *
 
 class Game:
     def __init__(self, config, game_time):
+        self.texts = []
         self.round = 0
         self.points = 0
         self.config = config
@@ -61,8 +62,7 @@ class Game:
     def event_handling(self, beer, donut, restart):
         if self.mouse_pos is not None:
             # if the user clicked onto beer or donut
-            if Game.is_over_rect(
-                    beer, self.mouse_pos) or self.is_over_rect(donut, self.mouse_pos):
+            if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(donut, self.mouse_pos):
                 # if he has clicked in the beer phase
                 if self.get_status(beer) == 0:
                     beer.clicks += 1
@@ -70,8 +70,7 @@ class Game:
                 else:
                     self.is_finished = True
             # if the user clicked onto the restart text
-            if restart.label is not None and self.is_over_rect(
-                    restart, self.mouse_pos):
+            if Game.is_over_rect(self.get_text('restart'), self.mouse_pos):
                 self.is_finished = False
 
     def input(self):
@@ -82,7 +81,7 @@ class Game:
                 sys.exit()
 
             # If clicked
-            elif event.type == MOUSEBUTTONUP and event.button == 1:
+            if event.type == MOUSEBUTTONUP and event.button == 1:
                 self.mouse_pos = pygame.mouse.get_pos()
 
     '''
@@ -91,12 +90,17 @@ class Game:
     thread.start()
     '''
 
-    def show_text(self, text, xCoord, yCoord):
+    def show_text(self, text_name, var=None):
+        text = self.get_text(text_name)
+        if var:
+            text.content[1] = var
+            text.set_label(True)
+        else:
+            text.set_label(False)
+        print(text.content)
         # render text
-        label = text.get_font().render(text.content, 1, (255, 255, 0))
-        self.config.window.blit(label, (xCoord, yCoord))
-
-        return label
+        self.config.window.blit(text.label, (text.x, text.y))
+        return text.label
 
     def show_game_object(self, game_object):
         self.config.window.fill(self.config.color)
@@ -114,12 +118,17 @@ class Game:
     def get_ran_num(self):
         return self.ran_num
 
-    def get_points(self):
-        return self.points
-
     def countdown(self):
         while self.game_time >= 0:
             # print(t)
             sleep(1)
             self.game_time -= 1
         self.is_finished = True
+
+    def add_text(self, text):
+        self.texts.append(text)
+
+    def get_text(self, text_name):
+        for text in self.texts:
+            if text.name == text_name:
+                return text

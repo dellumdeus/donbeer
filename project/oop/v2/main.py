@@ -15,9 +15,8 @@ CYAN = (0, 255, 255)
 def main():
     # Configure and create main-elements
     beer = Beer('../../images/bier2.png')
-
     donut = Donut(0, '../../images/donut2.png')
-
+    print('ich werde ausgefuhrt')
     game = Game(Configuration(700, 600, LIGHTBLUE), 60)
     game.config.set_up(True)
 
@@ -26,11 +25,7 @@ def main():
 
     game.new_round(beer)
 
-    points_text = Text('../../fonts/MeathFLF.ttf', 50)
-    instruction_text = Text('../../fonts/MeathFLF.ttf', 60)
-    time_text = Text('../../fonts/MeathFLF.ttf', 50)
-    result_text = Text('../../fonts/MeathFLF.ttf', 80)
-    restart_text = Text('../../fonts/MeathFLF.ttf', 80, 'Restart')
+    setup_texts(game)
 
     # while (game.run() not 0):
 
@@ -39,24 +34,14 @@ def main():
     while True:  # main game loop
 
         # Set the data for Points and Countdown
-        set_text_contents(game, instruction_text, points_text, result_text, time_text)
-
-        instruction_text_label = instruction_text.get_font().render(
-            instruction_text.content, 1, (255, 255, 0))
         game.input()
-        game.event_handling(beer, donut, restart_text)
+        game.event_handling(beer, donut, game.get_text('restart'))
 
         game.config.window.fill(LIGHTBLUE)
 
         if game.is_finished:
-            game.show_text(result_text, (game.config.window.get_width(
-            ) / 2) - (instruction_text_label.get_width() / 2), game.config.window.get_height() / 3)
-            restart_text.label = game.show_text(
-                restart_text,
-                (game.config.window.get_width() / 2) - (
-                        instruction_text_label.get_width() / 2),
-                (game.config.window.get_height() / 3) * 1.5)
-            # return 0
+            game.show_text('result', game.points)
+            game.show_text('restart')
 
         else:
             if game.get_status(beer) == 1:
@@ -65,26 +50,39 @@ def main():
             else:
                 game.show_game_object(beer)
 
-            game.show_text(
-                points_text,
-                game.config.window.get_width() / 5,
-                game.config.window.get_height() / 3)
-            game.show_text(
-                time_text,
-                (game.config.window.get_width() / 4) * 3,
-                game.config.window.get_height() / 3)
-            game.show_text(instruction_text, (game.config.window.get_width(
-            ) / 2) - (instruction_text_label.get_width() / 2), game.config.window.get_height() / 4)
+            game.show_text('points', game.points)
+            game.show_text('time', game.game_time)
+            game.show_text('instruction')
 
-        pygame.display.update()
-        game.config.fps_clock.tick(FPS)
+            pygame.display.update()
+            game.config.fps_clock.tick(FPS)
 
 
-def set_text_contents(game, instruction_text, points_text, result_text, time_text):
-    points_text.content = 'Points: ' + str(game.points)
-    time_text.content = 'Time: ' + str(game.game_time)
-    instruction_text.content = 'Don\'t press the donut!'
-    result_text.content = 'Total result: ' + str(game.points)
+def setup_texts(game):
+    game.add_text(Text('points', '../../fonts/MeathFLF.ttf', 50, 'Points: '))
+    game.add_text(Text('time', '../../fonts/MeathFLF.ttf', 60, 'Time: '))
+    game.add_text(Text('instruction', '../../fonts/MeathFLF.ttf', 50, 'Don\'t press the donut!'))
+    game.add_text(Text('result', '../../fonts/MeathFLF.ttf', 80, 'Total result: '))
+    game.add_text(Text('restart', '../../fonts/MeathFLF.ttf', 80, 'Restart'))
+    set_text_coords(game)
+
+
+def set_text_coords(game):
+    game.get_text('points').set_coords(
+        game.config.window.get_width() / 5,
+        game.config.window.get_height() / 3
+    )
+    game.get_text('time').set_coords(
+        game.config.window.get_width() / 4 * 3,
+        game.config.window.get_height() / 3
+    )
+    instruction = game.get_text('instruction')
+    instruction.set_coords(
+        game.config.window.get_width() / 2 - instruction.label.get_width() / 2,
+        game.config.window.get_height() / 4)
+    game.get_text('restart').set_coords(
+        game.config.window.get_width() / 2 - instruction.label.get_width() / 2,
+        game.config.window.get_height() / 3 * 1.5)
 
 
 if __name__ == '__main__':

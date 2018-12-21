@@ -11,13 +11,13 @@ class Text:
         self.fontSize = size  # font_size = 32
         self.content = [content, 0]
         self.label = self.get_font().render(content, 1, (255, 255, 0))
-        self.rect = self.label.get_rect(topleft=(788, 587))
+        self.rect = None
 
     def get_font(self):
         return pygame.font.Font(self.font, self.fontSize)
 
     def get_rect(self):
-        return self.rect
+        return self.label.get_rect(topleft=(self.x, self.y))
 
     def set_coords(self, x, y):
         self.x = x

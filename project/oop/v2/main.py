@@ -16,7 +16,6 @@ def main():
     # Configure and create main-elements
     beer = Beer('../../images/bier2.png')
     donut = Donut(0, '../../images/donut2.png')
-    print('ich werde ausgefuhrt')
     game = Game(Configuration(700, 600, LIGHTBLUE), 60)
     game.config.set_up(True)
 
@@ -32,19 +31,20 @@ def main():
     thread = Thread(target=game.countdown)
     thread.start()
     while True:  # main game loop
-
         # Set the data for Points and Countdown
-        game.input()
-        game.event_handling(beer, donut, game.get_text('restart'))
+        game.handle_input()
+        game.event_handling(beer, donut)
 
         game.config.window.fill(LIGHTBLUE)
+        if game.new_game:
+            break
 
         if game.is_finished:
             game.show_text('result', game.points)
             game.show_text('restart')
 
         else:
-            if game.get_status(beer) == 1:
+            if game.get_status(beer) == 'donut':
                 game.show_game_object(donut)
 
             else:
@@ -54,8 +54,9 @@ def main():
             game.show_text('time', game.game_time)
             game.show_text('instruction')
 
-            pygame.display.update()
-            game.config.fps_clock.tick(FPS)
+        pygame.display.update()
+        game.config.fps_clock.tick(FPS)
+    return 0
 
 
 def setup_texts(game):

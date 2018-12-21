@@ -18,6 +18,8 @@ class Game:
         self.game_time = game_time
         self.ran_num = None
         self.random_time = None
+        self.mouse_pos = None
+        self.new_game = False
 
     # new Round has new random Int and Local time of the pause(wait bcs of Donut)
     def new_round(self, beer):
@@ -49,31 +51,32 @@ class Game:
         if beer.clicks == self.get_ran_num():
             self.donut_wait_start = datetime.datetime.now()
             self.new_round(beer)
-            return 1
+            return'donut'
         elif self.wait():
-            return 1
+            return 'donut'
         else:
-            return 0
+            return 'beer'
 
     """
     Handles the clicks of the user to the beer and donut
     """
 
-    def event_handling(self, beer, donut, restart):
+    def event_handling(self, beer, donut):
         if self.mouse_pos is not None:
             # if the user clicked onto beer or donut
             if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(donut, self.mouse_pos):
                 # if he has clicked in the beer phase
-                if self.get_status(beer) == 0:
+                if self.get_status(beer) == 'beer':
                     beer.clicks += 1
                     self.points += beer.clicks
                 else:
                     self.is_finished = True
             # if the user clicked onto the restart text
-            if Game.is_over_rect(self.get_text('restart'), self.mouse_pos):
+            elif Game.is_over_rect(self.get_text('restart'), self.mouse_pos):
                 self.is_finished = False
+                self.new_game = True
 
-    def input(self):
+    def handle_input(self):
         self.mouse_pos = None
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -84,12 +87,6 @@ class Game:
             if event.type == MOUSEBUTTONUP and event.button == 1:
                 self.mouse_pos = pygame.mouse.get_pos()
 
-    '''
-    def run(self, beer, donut):
-        thread = Thread(target = game.countdown)
-    thread.start()
-    '''
-
     def show_text(self, text_name, var=None):
         text = self.get_text(text_name)
         if var:
@@ -97,7 +94,6 @@ class Game:
             text.set_label(True)
         else:
             text.set_label(False)
-        print(text.content)
         # render text
         self.config.window.blit(text.label, (text.x, text.y))
         return text.label
@@ -107,7 +103,6 @@ class Game:
         self.config.window.blit(
             game_object.get_image(),
             game_object.get_rect())
-        # print (object.source)
 
     @staticmethod
     def is_over_rect(game_object, mouse_pos):

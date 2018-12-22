@@ -51,6 +51,7 @@ def main():
                 game.show_game_object(beer)
 
             game.show_text('points', game.points)
+            game.show_text('round', game.round)
             game.show_text('time', game.game_time)
             game.show_text('instruction')
 
@@ -60,36 +61,31 @@ def main():
 
 
 def setup_texts(game):
-    game.add_text(Text('points', '../../fonts/MeathFLF.ttf', 50, 'Points: '))
+    game.add_text(Text('points', '../../fonts/MeathFLF.ttf', 60, 'Points: '))
+    game.add_text(Text('round', '../../fonts/MeathFLF.ttf', 60, 'Round: '))
     game.add_text(Text('time', '../../fonts/MeathFLF.ttf', 60, 'Time: '))
-    game.add_text(Text('instruction', '../../fonts/MeathFLF.ttf', 50, 'Don\'t press the donut!'))
+    game.add_text(Text('instruction', '../../fonts/MeathFLF.ttf', 60, 'Don\'t press the donut!'))
     game.add_text(Text('result', '../../fonts/MeathFLF.ttf', 130, 'Total result: '))
     game.add_text(Text('restart', '../../fonts/MeathFLF.ttf', 80, '>>>RESTART<<<'))
     set_text_coords(game)
 
 
 def set_text_coords(game):
-    game.get_text('points').set_coords(
-        game.config.window.get_width() / 5,
-        game.config.window.get_height() / 3
-    )
-    game.get_text('time').set_coords(
-        game.config.window.get_width() / 4 * 3,
-        game.config.window.get_height() / 3
-    )
+    window_width = game.config.window.get_width()
+    window_height = game.config.window.get_height()
+
+    game.get_text('points').set_coords(window_width / 5, window_height / 3)
+    game.get_text('round').set_coords(window_width / 5, window_height / 2)
+    game.get_text('time').set_coords(window_width / 4 * 3, window_height / 3)
+
     instruction = game.get_text('instruction')
-    instruction.set_coords(
-        game.config.window.get_width() / 2 - instruction.label.get_width() / 2,
-        game.config.window.get_height() / 4)
+    instruction.set_coords(window_width / 2 - instruction.label.get_width() / 2, window_height / 4)
+
     restart = game.get_text('restart')
-    restart.set_coords(
-        game.config.window.get_width() / 2 - restart.label.get_width() / 2,
-        game.config.window.get_height() / 3 * 1.5)
+    restart.set_coords(window_width / 2 - restart.label.get_width() / 2, window_height / 3 * 1.5)
+
     result = game.get_text('result')
-    result.set_coords(
-        game.config.window.get_width() / 2 - result.label.get_width() / 2,
-        game.config.window.get_height() / 4
-    )
+    result.set_coords(window_width / 2 - result.label.get_width() / 2, window_height / 4)
 
 
 if __name__ == '__main__':

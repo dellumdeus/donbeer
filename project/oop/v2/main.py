@@ -33,7 +33,7 @@ def main():
     while True:  # main game loop
         # Set the data for Points and Countdown
         game.handle_input()
-        game.event_handling(beer, donut)
+        game.handle_event(beer, donut)
 
         game.config.window.fill(LIGHTBLUE)
         if game.new_game:
@@ -63,8 +63,8 @@ def setup_texts(game):
     game.add_text(Text('points', '../../fonts/MeathFLF.ttf', 50, 'Points: '))
     game.add_text(Text('time', '../../fonts/MeathFLF.ttf', 60, 'Time: '))
     game.add_text(Text('instruction', '../../fonts/MeathFLF.ttf', 50, 'Don\'t press the donut!'))
-    game.add_text(Text('result', '../../fonts/MeathFLF.ttf', 80, 'Total result: '))
-    game.add_text(Text('restart', '../../fonts/MeathFLF.ttf', 80, 'Restart'))
+    game.add_text(Text('result', '../../fonts/MeathFLF.ttf', 130, 'Total result: '))
+    game.add_text(Text('restart', '../../fonts/MeathFLF.ttf', 80, '>>>RESTART<<<'))
     set_text_coords(game)
 
 
@@ -81,9 +81,15 @@ def set_text_coords(game):
     instruction.set_coords(
         game.config.window.get_width() / 2 - instruction.label.get_width() / 2,
         game.config.window.get_height() / 4)
-    game.get_text('restart').set_coords(
-        game.config.window.get_width() / 2 - instruction.label.get_width() / 2,
+    restart = game.get_text('restart')
+    restart.set_coords(
+        game.config.window.get_width() / 2 - restart.label.get_width() / 2,
         game.config.window.get_height() / 3 * 1.5)
+    result = game.get_text('result')
+    result.set_coords(
+        game.config.window.get_width() / 2 - result.label.get_width() / 2,
+        game.config.window.get_height() / 4
+    )
 
 
 if __name__ == '__main__':

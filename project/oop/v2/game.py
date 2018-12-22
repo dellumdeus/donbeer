@@ -51,7 +51,7 @@ class Game:
         if beer.clicks == self.get_ran_num():
             self.donut_wait_start = datetime.datetime.now()
             self.new_round(beer)
-            return'donut'
+            return 'donut'
         elif self.wait():
             return 'donut'
         else:
@@ -61,20 +61,22 @@ class Game:
     Handles the clicks of the user to the beer and donut
     """
 
-    def event_handling(self, beer, donut):
+    def handle_event(self, beer, donut):
         if self.mouse_pos is not None:
-            # if the user clicked onto beer or donut
-            if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(donut, self.mouse_pos):
-                # if he has clicked in the beer phase
-                if self.get_status(beer) == 'beer':
-                    beer.clicks += 1
-                    self.points += beer.clicks
-                else:
-                    self.is_finished = True
-            # if the user clicked onto the restart text
-            elif Game.is_over_rect(self.get_text('restart'), self.mouse_pos):
-                self.is_finished = False
-                self.new_game = True
+            if self.is_finished:
+                if Game.is_over_rect(self.get_text('restart'), self.mouse_pos):
+                    self.is_finished = False
+                    self.new_game = True
+            else:
+                # if the user clicked onto beer or donut
+                if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(donut, self.mouse_pos):
+                    # if he has clicked in the beer phase
+                    if self.get_status(beer) == 'beer':
+                        beer.clicks += 1
+                        self.points += beer.clicks
+                    else:
+                        self.is_finished = True
+                # if the user clicked onto the restart text
 
     def handle_input(self):
         self.mouse_pos = None

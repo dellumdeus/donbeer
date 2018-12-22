@@ -13,20 +13,19 @@ CYAN = (0, 255, 255)
 
 
 def main():
-    # Configure and create main-elements
+    """Run the game and create/configure main-elements"""
+
     beer = Beer('../../images/bier2.png')
     donut = Donut(0, '../../images/donut2.png')
     game = Game(Configuration(700, 600, LIGHTBLUE), 60)
     game.config.set_up(True)
 
     for element in [donut, beer]:
-        element.get_rect().center = (game.config.window.get_width() / 2, game.config.window.get_height() / 2)
+        element.rect.center = (game.config.window.get_width() / 2, game.config.window.get_height() / 2)
 
     game.new_round(beer)
 
     setup_texts(game)
-
-    # while (game.run() not 0):
 
     thread = Thread(target=game.countdown)
     thread.start()
@@ -61,6 +60,8 @@ def main():
 
 
 def setup_texts(game):
+    """Add the text elements to the game object"""
+
     game.add_text(Text('points', '../../fonts/MeathFLF.ttf', 60, 'Points: '))
     game.add_text(Text('round', '../../fonts/MeathFLF.ttf', 60, 'Round: '))
     game.add_text(Text('time', '../../fonts/MeathFLF.ttf', 60, 'Time: '))
@@ -71,6 +72,8 @@ def setup_texts(game):
 
 
 def set_text_coords(game):
+    """Set the coordinates(x,y) on the pane for the text elements"""
+
     window_width = game.config.window.get_width()
     window_height = game.config.window.get_height()
 

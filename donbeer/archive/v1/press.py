@@ -175,7 +175,7 @@ def main():
     conf = Configuration(700, 600)
 
     print(datetime.datetime.now().time())
-    beer = Beer('../images/bier2.png')
+    beer = Beer('../images/beer2.png')
     beerimg = beer.getImage()
     beerRect = beerimg.get_rect()
 

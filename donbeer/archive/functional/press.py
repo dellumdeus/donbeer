@@ -12,7 +12,7 @@ WINDOWHEIGHT = 600
 CYAN = (0, 255, 255)
 
 
-bier = pygame.image.load('images/bier2.png')
+bier = pygame.image.load('images/beer2.png')
 bierRect = bier.get_rect()
 donut = pygame.image.load('images/donut2.png')
 donutRect = donut.get_rect()

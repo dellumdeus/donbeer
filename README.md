@@ -19,4 +19,4 @@ https://www.python.org/downloads/
 
 ## Versioning
 
-**1.0.5**
+**1.0.7**

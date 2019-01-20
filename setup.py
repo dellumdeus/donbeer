@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="donbeer",
-    version="1.0.5",
+    version="1.0.7",
     author="dellumdeus",
     author_email="alion.develop@gmail.com",
     description="The user is able to click on a beer until a donut appears.",
@@ -20,9 +20,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    # include_package_data=True,
+    include_package_data=True,
     package_data={
-        "donbeer": ["assets/images/*.png"],
+        'donbeer': ['resources/images/*.png', 'resources/fonts/*.ttf'],
     },
-    data_files=[('assets/images', ['./donbeer/assets/images/beer2.png'])]
 )

@@ -6,6 +6,7 @@ from donbeer.configuration import Configuration
 from donbeer.donut import Donut
 from donbeer.game import Game
 from donbeer.text import Text
+from pkg_resources import resource_stream, resource_filename
 
 FPS = 60
 LIGHTBLUE = (131, 66, 244)
@@ -15,8 +16,8 @@ CYAN = (0, 255, 255)
 def main():
     """Run the game and create/configure main-elements"""
 
-    beer = Beer('assets/images/beer2.png')
-    donut = Donut(0, 'assets/images/donut2.png')
+    beer = Beer(resource_stream(__name__, 'resources/images/beer2.png'))
+    donut = Donut(0, resource_stream(__name__, 'resources/images/donut2.png'))
     game = Game(Configuration(700, 600, LIGHTBLUE), 60)
     game.config.set_up(True)
 
@@ -61,13 +62,13 @@ def main():
 
 def setup_texts(game):
     """Add the text elements to the game object"""
-
-    game.add_text(Text('points', 'assets/fonts/MeathFLF.ttf', 60, 'Points: '))
-    game.add_text(Text('round', 'assets/fonts/MeathFLF.ttf', 60, 'Round: '))
-    game.add_text(Text('time', 'assets/fonts/MeathFLF.ttf', 60, 'Time: '))
-    game.add_text(Text('instruction', 'assets/fonts/MeathFLF.ttf', 60, 'Don\'t press the donut!'))
-    game.add_text(Text('result', 'assets/fonts/MeathFLF.ttf', 130, 'Total result: '))
-    game.add_text(Text('restart', 'assets/fonts/MeathFLF.ttf', 80, '>>>RESTART<<<'))
+    game.add_text(Text('points', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Points: '))
+    game.add_text(Text('round', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Round: '))
+    game.add_text(Text('time', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Time: '))
+    game.add_text(
+        Text('instruction', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Don\'t press the donut!'))
+    game.add_text(Text('result', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 130, 'Total result: '))
+    game.add_text(Text('restart', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 80, '>>>RESTART<<<'))
     set_text_coords(game)
 
 

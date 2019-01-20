@@ -16,6 +16,11 @@ Make sure you got the latest python version installed:
 
 https://www.python.org/downloads/
 
+## Installation
+
+* Run `pip install donbeer` to download and install the package.
+
+* Run `python -m donbeer` and enjoy the game.
 
 ## Versioning
 

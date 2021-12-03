@@ -49,8 +49,8 @@ class Game:
 
     def get_status(self, beer):
         """Get the status, of witch item is currently displayed"""
-
-        if beer.clicks == self.ran_num:
+        isBeerTimeOver = beer.clicks == self.ran_num
+        if isBeerTimeOver:
             self.donut_wait_start = datetime.datetime.now()
             self.new_round(beer)
             return 'donut'

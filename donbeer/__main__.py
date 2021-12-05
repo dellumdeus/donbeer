@@ -6,11 +6,19 @@ from donbeer.configuration import Configuration
 from donbeer.donut import Donut
 from donbeer.game import Game
 from donbeer.text import Text
-from pkg_resources import resource_stream, resource_filename
+from donbeer.helpers import build_text_objs, set_text_coords
+from pkg_resources import resource_stream
 
 FPS = 60
 LIGHTBLUE = (131, 66, 244)
 CYAN = (0, 255, 255)
+
+TEXT_DICT = {
+    "basic": {"points", "time", "round"},
+    "instruction": ['Don\'t press the donut!', 60],
+    "result": ['Total result: ', 130],
+    "restart": ['>>>RESTART<<<', 80]
+}
 
 
 def main():
@@ -22,7 +30,10 @@ def main():
     game.config.set_up(True)
 
     for element in [donut, beer]:
-        element.rect.center = (game.config.window.get_width() / 2, game.config.window.get_height() / 2)
+        element.rect.center = (
+            game.config.window.get_width() / 2,
+            game.config.window.get_height() / 2
+        )
 
     game.new_round(beer)
 
@@ -61,35 +72,14 @@ def main():
 
 
 def setup_texts(game):
-    """Add the text elements to the game object"""
-    game.add_text(Text('points', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Points: '))
-    game.add_text(Text('round', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Round: '))
-    game.add_text(Text('time', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Time: '))
-    game.add_text(
-        Text('instruction', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 60, 'Don\'t press the donut!'))
-    game.add_text(Text('result', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 130, 'Total result: '))
-    game.add_text(Text('restart', resource_filename(__name__, 'resources/fonts/MeathFLF.ttf'), 80, '>>>RESTART<<<'))
-    set_text_coords(game)
+    build_text_objs(game, TEXT_DICT)
+    set_text_coords(game, 'points')
+    set_text_coords(game, 'round', {'h': 7})
+    set_text_coords(game, 'time', {'w': 7.5})
 
-
-def set_text_coords(game):
-    """Set the coordinates(x,y) on the pane for the text elements"""
-
-    window_width = game.config.window.get_width()
-    window_height = game.config.window.get_height()
-
-    game.get_text('points').set_coords(window_width / 5, window_height / 3)
-    game.get_text('round').set_coords(window_width / 5, window_height / 2)
-    game.get_text('time').set_coords(window_width / 4 * 3, window_height / 3)
-
-    instruction = game.get_text('instruction')
-    instruction.set_coords(window_width / 2 - instruction.label.get_width() / 2, window_height / 4)
-
-    restart = game.get_text('restart')
-    restart.set_coords(window_width / 2 - restart.label.get_width() / 2, window_height / 3 * 1.5)
-
-    result = game.get_text('result')
-    result.set_coords(window_width / 2 - result.label.get_width() / 2, window_height / 4)
+    set_text_coords(game, 'instruction', {'h': 2, 'w': 5})
+    set_text_coords(game, 'result', {'h': 3, 'w': 5})
+    set_text_coords(game, 'restart', {'h': 7, 'w': 5})
 
 
 if __name__ == '__main__':

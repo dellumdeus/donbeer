@@ -40,7 +40,8 @@ class Game:
 
         if self.donut_wait_start:
             # Adds seconds to the start-time and gets the end time
-            donut_wait_end = self.donut_wait_start + datetime.timedelta(seconds=self.random_time)
+            donut_wait_end = self.donut_wait_start + \
+                datetime.timedelta(seconds=self.random_time)
             if datetime.datetime.now() >= donut_wait_end:
                 self.donut_wait_start = None
                 return False
@@ -70,7 +71,9 @@ class Game:
                     self.new_game = True
             else:
                 # if the user clicked onto beer or donut
-                if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(donut, self.mouse_pos):
+                if Game.is_over_rect(beer, self.mouse_pos) or Game.is_over_rect(
+                        donut, self.mouse_pos
+                    ):
                     # if he has clicked in the beer phase
                     if self.get_status(beer) == 'beer':
                         beer.clicks += 1

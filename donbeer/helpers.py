@@ -1,37 +1,44 @@
 from pkg_resources import resource_filename
 from donbeer.text import Text
+import pdb
 
 
-def build_text_objs(game, text_dict):
-    """Add the text elements to the game object"""
+class SetupHelper:
+    def __init__(self, game, text_infos):
+        self.game = game
+        self.text_infos = text_infos
+        self.text_font = resource_filename(__name__, text_infos["font"])
 
-    font = resource_filename(__name__, 'resources/fonts/MeathFLF.ttf')
+    def build_text_obj(self, name, font_size, content, location_data):
+        self.game.add_text(Text(name, self.text_font, font_size, content))
+        self.set_text_coords(name, location_data)
 
-    for basic_text in text_dict["basic"]:
-        content = basic_text.capitalize() + ":"
-        game.add_text(Text(basic_text, font, 60, content))
+    def build_text_objs(self):
+        """Add the text elements to the game object"""
 
-    for main_text in list(text_dict.items())[1:]:
-        name = main_text[0]
-        font_size = main_text[1][1]
-        content = main_text[1][0]
-        game.add_text(Text(name, font, font_size, content))
+        for name, multipliers in self.text_infos["basic"].items():
+            content = name.capitalize() + ":"
+            self.build_text_obj(name, 60, content, multipliers)
 
+        for name, info in self.text_infos["main"].items():
+            self.build_text_obj(name, info[1], info[0], info[2])
 
-def set_text_coords(game, name, multipliers={}):
-    """Set the coordinates(x,y) on the pane for the text elements"""
+    def set_text_coords(self, name, multipliers):
+        """Set the coordinates(x,y) on the pane for the text elements"""
 
-    window_width = game.config.window.get_width()
-    window_height = game.config.window.get_height()
-    text = game.get_text(name)
+        text = self.game.get_text(name)
 
-    label_middle_w = text.label.get_width() / 2
-    label_middle_h = text.label.get_height() / 2
+        window_dimensions = self.game.config.window.get_size()
+        label_dimensions = text.label.get_size()
 
-    standard_width = window_width / 10
-    standard_heigth = window_height / 10
+        def updated_dimension(index, multiplier):
+            return (
+                window_dimensions[index] / 10 
+                * multipliers.get(*multiplier) 
+                - label_dimensions[index] / 2
+            )
 
-    updated_width = standard_width * multipliers.get('w', 2.5) - label_middle_w
-    updated_height = standard_heigth * multipliers.get('h', 4) - label_middle_h
-
-    text.set_coords(updated_width, updated_height)
+        text.set_coords(
+            updated_dimension(0, ('w', 2.5)),
+            updated_dimension(1, ('h', 4)),
+        )

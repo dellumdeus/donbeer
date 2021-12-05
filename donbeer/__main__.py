@@ -6,18 +6,25 @@ from donbeer.configuration import Configuration
 from donbeer.donut import Donut
 from donbeer.game import Game
 from donbeer.text import Text
-from donbeer.helpers import build_text_objs, set_text_coords
+from donbeer.helpers import SetupHelper
 from pkg_resources import resource_stream
 
 FPS = 60
 LIGHTBLUE = (131, 66, 244)
 CYAN = (0, 255, 255)
 
-TEXT_DICT = {
-    "basic": {"points", "time", "round"},
-    "instruction": ['Don\'t press the donut!', 60],
-    "result": ['Total result: ', 130],
-    "restart": ['>>>RESTART<<<', 80]
+TEXT_INFOS = {
+    'font': 'resources/fonts/MeathFLF.ttf',
+    'basic': {
+        'points': {},
+        'time': {'w': 7.5},
+        'round': {'h': 7}
+    },
+    'main': {
+        'instruction': ["Don't press the donut!", 60, {'h': 2, 'w': 5}],
+        'result': ['Total result: ', 130, {'h': 3, 'w': 5}],
+        'restart': ['>>>RESTART<<<', 80, {'h': 7, 'w': 5}]
+    }
 }
 
 
@@ -28,6 +35,7 @@ def main():
     donut = Donut(0, resource_stream(__name__, 'resources/images/donut2.png'))
     game = Game(Configuration(700, 600, LIGHTBLUE), 60)
     game.config.set_up(True)
+    setup_helper = SetupHelper(game, TEXT_INFOS)
 
     for element in [donut, beer]:
         element.rect.center = (
@@ -36,8 +44,7 @@ def main():
         )
 
     game.new_round(beer)
-
-    setup_texts(game)
+    setup_helper.build_text_objs()
 
     thread = Thread(target=game.countdown)
     thread.start()
@@ -69,17 +76,6 @@ def main():
         pygame.display.update()
         game.config.fps_clock.tick(FPS)
     return 0
-
-
-def setup_texts(game):
-    build_text_objs(game, TEXT_DICT)
-    set_text_coords(game, 'points')
-    set_text_coords(game, 'round', {'h': 7})
-    set_text_coords(game, 'time', {'w': 7.5})
-
-    set_text_coords(game, 'instruction', {'h': 2, 'w': 5})
-    set_text_coords(game, 'result', {'h': 3, 'w': 5})
-    set_text_coords(game, 'restart', {'h': 7, 'w': 5})
 
 
 if __name__ == '__main__':

@@ -9,21 +9,21 @@ class SetupHelper:
         self.text_infos = text_infos
         self.text_font = resource_filename(__name__, text_infos["font"])
 
-    def build_text_obj(self, name, font_size, content, location_data):
+    def build_text_object(self, name, font_size, content, location_data):
         self.game.add_text(Text(name, self.text_font, font_size, content))
-        self.set_text_coords(name, location_data)
+        self.set_text_coordinates(name, location_data)
 
-    def build_text_objs(self):
+    def build_text_objects(self):
         """Add the text elements to the game object"""
 
         for name, multipliers in self.text_infos["basic"].items():
             content = name.capitalize() + ":"
-            self.build_text_obj(name, 60, content, multipliers)
+            self.build_text_object(name, 60, content, multipliers)
 
         for name, info in self.text_infos["main"].items():
-            self.build_text_obj(name, info[1], info[0], info[2])
+            self.build_text_object(name, info[1], info[0], info[2])
 
-    def set_text_coords(self, name, multipliers):
+    def set_text_coordinates(self, name, multipliers):
         """Set the coordinates(x,y) on the pane for the text elements"""
 
         text = self.game.get_text(name)

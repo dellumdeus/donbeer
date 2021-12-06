@@ -1,8 +1,6 @@
 from donbeer.game import Game
 from unittest.mock import MagicMock, patch
 import pytest
-import pdb
-import time
 
 beer = MagicMock()
 donut = MagicMock()
@@ -18,12 +16,12 @@ def test_new_round(game):
     game.new_round(beer)
 
     assert game.round == old_game_round + 1
-    assert game.ran_num and game.random_time is not None
+    assert game.random_number and game.random_time is not None
     assert beer.clicks == 0
 
 
 def test_get_status_when_waiting_starts(game):
-    beer.clicks = game.ran_num
+    beer.clicks = game.random_number
     status = game.get_status(beer)
 
     assert game.donut_wait_start is not None

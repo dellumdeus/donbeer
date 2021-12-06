@@ -1,31 +1,12 @@
 from threading import Thread
+from donbeer.game_config import FPS, LIGHTBLUE, TEXT_INFOS
+from donbeer.objects import Beer, Donut
 import pygame
 
-from donbeer.beer import Beer
 from donbeer.configuration import Configuration
-from donbeer.donut import Donut
 from donbeer.game import Game
-from donbeer.text import Text
 from donbeer.helpers import SetupHelper
 from pkg_resources import resource_stream
-
-FPS = 60
-LIGHTBLUE = (131, 66, 244)
-CYAN = (0, 255, 255)
-
-TEXT_INFOS = {
-    'font': 'resources/fonts/MeathFLF.ttf',
-    'basic': {
-        'points': {},
-        'time': {'w': 7.5},
-        'round': {'h': 7}
-    },
-    'main': {
-        'instruction': ["Don't press the donut!", 60, {'h': 2, 'w': 5}],
-        'result': ['Total result: ', 130, {'h': 3, 'w': 5}],
-        'restart': ['>>>RESTART<<<', 80, {'h': 7, 'w': 5}]
-    }
-}
 
 
 def main():

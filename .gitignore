@@ -1,2 +1,10 @@
 .idea
+.coverage
+bin
+build
+donbeer.egg-info
+include
+lib
 project/oop/v2/__pycache__
+conftest.py
+pyvenv.cfg
